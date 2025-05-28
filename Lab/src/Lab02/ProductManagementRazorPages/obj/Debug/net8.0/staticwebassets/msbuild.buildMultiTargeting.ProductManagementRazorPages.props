@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\ProductManagementRazorPages.props" />
-</Project>

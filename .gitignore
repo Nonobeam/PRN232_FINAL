@@ -1,0 +1,88 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET files
+_ReSharper*/
+*.resharper
+*.vspscc
+*.vssscc
+.vs/
+*.dbmdl
+*.bak
+*.sql
+*.pdb
+
+# IIS Express
+/.vs/
+/iisexpress/
+*.iis
+
+# Rider
+.idea/
+*.sln.iml
+
+# User secrets
+**/secrets.json
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NPM packages
+node_modules/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+
+# Publish output
+publish/
+
+# Others
+*.ncrunch*
+*.localhistory
+*.cache
+*.config
+*.scc
+*.orig
+
+# Azure Pipelines
+.azure-pipelines/
+
+# Coverage reports
+coverage/
+*.coverage
+*.coveragexml
+TestResults/
+
+# Python environments if using Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
