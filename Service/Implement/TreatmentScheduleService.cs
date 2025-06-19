@@ -1,38 +1,40 @@
 ﻿using Model.Models;
+using Repository;
 
-namespace Service.Implement;
-
-public class TreatmentScheduleService : ITreatmentScheduleService
+namespace Service.Implement
 {
-    private readonly ITreatmentScheduleRepository _repository;
-
-    public TreatmentScheduleService(ITreatmentScheduleRepository repository)
+    public class TreatmentScheduleService : ITreatmentScheduleService
     {
-        _repository = repository;
-    }
+        private readonly ITreatmentScheduleRepository _repository;
 
-    public Task<List<TreatmentSchedule>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public TreatmentScheduleService(ITreatmentScheduleRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public Task<TreatmentSchedule> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<List<TreatmentSchedule>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task CreateAsync(TreatmentSchedule a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<TreatmentSchedule> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task UpdateAsync(TreatmentSchedule a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task CreateAsync(TreatmentSchedule a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task DeleteAsync(TreatmentSchedule a)
-    {
-        throw new NotImplementedException();
+        public Task UpdateAsync(TreatmentSchedule a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(TreatmentSchedule a)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,53 +1,55 @@
 ﻿using Model.Models;
+using Repository;
 
-namespace Service.Implement;
-
-public class TreatmentBookingService : ITreatmentBookingService
+namespace Service.Implement
 {
-    private readonly ITreatmentBookingRepository _repository;
-
-    public TreatmentBookingService(ITreatmentBookingRepository repository)
+    public class TreatmentBookingService : ITreatmentBookingService
     {
-        _repository = repository;
-    }
+        private readonly ITreatmentBookingRepository _repository;
 
-    public Task<List<TreatmentBooking>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public TreatmentBookingService(ITreatmentBookingRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public Task<TreatmentBooking> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<List<TreatmentBooking>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task CreateAsync(TreatmentBooking a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<TreatmentBooking> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task UpdateAsync(TreatmentBooking a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task CreateAsync(TreatmentBooking a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task DeleteAsync(TreatmentBooking a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task UpdateAsync(TreatmentBooking a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task CreateAsync(User user)
-    {
-        throw new NotImplementedException();
-    }
+        public Task DeleteAsync(TreatmentBooking a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task UpdateAsync(User user)
-    {
-        throw new NotImplementedException();
-    }
+        public Task CreateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

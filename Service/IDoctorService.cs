@@ -1,10 +1,13 @@
 ﻿using Model.Models;
 
-public interface IDoctorService
+namespace Service
 {
-    Task<List<Doctor>> GetAllAsync();
-    Task<Doctor> GetByIdAsync(int id);
-    Task CreateAsync(Doctor a);
-    Task UpdateAsync(Doctor a);
-    Task DeleteAsync(Doctor a);
+    public interface IDoctorService
+    {
+        Task<List<Doctor>> GetAllAsync();
+        Task<Doctor> GetByIdAsync(int id);
+        Task CreateAsync(Doctor a);
+        Task UpdateAsync(Doctor a);
+        Task DeleteAsync(Doctor a);
+    }
 }

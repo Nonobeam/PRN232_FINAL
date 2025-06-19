@@ -1,53 +1,55 @@
 ﻿using Model.Models;
+using Repository;
 
-namespace Service.Implement;
-
-public class RoleService : IRoleService
+namespace Service.Implement
 {
-    private readonly IRoleRepository _repository;
-
-    public RoleService(IRoleRepository repository)
+    public class RoleService : IRoleService
     {
-        _repository = repository;
-    }
+        private readonly IRoleRepository _repository;
 
-    public Task<List<Role>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public RoleService(IRoleRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public Task<Role> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<List<Role>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task CreateAsync(Role a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<Role> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task UpdateAsync(Role a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task CreateAsync(Role a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task DeleteAsync(Role a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task UpdateAsync(Role a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task CreateAsync(User user)
-    {
-        throw new NotImplementedException();
-    }
+        public Task DeleteAsync(Role a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task UpdateAsync(User user)
-    {
-        throw new NotImplementedException();
-    }
+        public Task CreateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
+using Service;
 
 namespace WebAPI.Controllers;
 

@@ -2,42 +2,45 @@
 using Model.Models;
 using Repository.Context;
 
-public class TreatmentBookingRepository : ITreatmentBookingRepository
+namespace Repository.Implement
 {
-    private readonly InfertilityTreatmentDBContext _context;
-
-    public TreatmentBookingRepository(InfertilityTreatmentDBContext context)
+    public class TreatmentBookingRepository : ITreatmentBookingRepository
     {
-        _context = context;
-    }
+        private readonly InfertilityTreatmentDBContext _context;
 
-    public async Task<List<TreatmentBooking>> GetAllAsync()
-    {
-        return await _context.TreatmentBookings.ToListAsync();
-    }
+        public TreatmentBookingRepository(InfertilityTreatmentDBContext context)
+        {
+            _context = context;
+        }
 
-    public async Task<TreatmentBooking> GetByIdAsync(int id)
-    {
-        return await _context.TreatmentBookings.FindAsync(id);
-    }
+        public async Task<List<TreatmentBooking>> GetAllAsync()
+        {
+            return await _context.TreatmentBookings.ToListAsync();
+        }
 
-    public async Task AddAsync(TreatmentBooking booking)
-    {
-        await _context.TreatmentBookings.AddAsync(booking);
-    }
+        public async Task<TreatmentBooking> GetByIdAsync(int id)
+        {
+            return await _context.TreatmentBookings.FindAsync(id);
+        }
 
-    public void Update(TreatmentBooking booking)
-    {
-        _context.TreatmentBookings.Update(booking);
-    }
+        public async Task AddAsync(TreatmentBooking booking)
+        {
+            await _context.TreatmentBookings.AddAsync(booking);
+        }
 
-    public void Delete(TreatmentBooking booking)
-    {
-        _context.TreatmentBookings.Remove(booking);
-    }
+        public void Update(TreatmentBooking booking)
+        {
+            _context.TreatmentBookings.Update(booking);
+        }
 
-    public async Task SaveAsync()
-    {
-        await _context.SaveChangesAsync();
+        public void Delete(TreatmentBooking booking)
+        {
+            _context.TreatmentBookings.Remove(booking);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

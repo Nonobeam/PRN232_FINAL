@@ -1,39 +1,43 @@
 ﻿using Model.Models;
+using Repository;
 
-public class UserService : IUserService
+namespace Service.Implement
 {
-    private readonly IUserRepository _repository;
-
-    public UserService(IUserRepository repository)
+    public class UserService : IUserService
     {
-        _repository = repository;
-    }
+        private readonly IUserRepository _repository;
 
-    public async Task<List<User>> GetAllAsync()
-    {
-        return await _repository.GetAllAsync();
-    }
+        public UserService(IUserRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public async Task<User> GetByIdAsync(int id)
-    {
-        return await _repository.GetByIdAsync(id);
-    }
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _repository.GetAllAsync();
+        }
 
-    public async Task CreateAsync(User user)
-    {
-        await _repository.AddAsync(user);
-        await _repository.SaveAsync();
-    }
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
 
-    public async Task UpdateAsync(User user)
-    {
-        _repository.Update(user);
-        await _repository.SaveAsync();
-    }
+        public async Task CreateAsync(User user)
+        {
+            await _repository.AddAsync(user);
+            await _repository.SaveAsync();
+        }
 
-    public async Task DeleteAsync(User user)
-    {
-        _repository.Delete(user);
-        await _repository.SaveAsync();
+        public async Task UpdateAsync(User user)
+        {
+            _repository.Update(user);
+            await _repository.SaveAsync();
+        }
+
+        public async Task DeleteAsync(User user)
+        {
+            _repository.Delete(user);
+            await _repository.SaveAsync();
+        }
     }
 }

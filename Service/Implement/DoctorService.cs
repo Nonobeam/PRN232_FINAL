@@ -1,38 +1,40 @@
 ﻿using Model.Models;
+using Repository;
 
-namespace Service.Implement;
-
-public class DoctorService : IDoctorService
+namespace Service.Implement
 {
-    private readonly IDoctorRepository _repository;
-
-    public DoctorService(IDoctorRepository repository)
+    public class DoctorService : IDoctorService
     {
-        _repository = repository;
-    }
+        private readonly IDoctorRepository _repository;
 
-    public Task<List<Doctor>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public DoctorService(IDoctorRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public Task<Doctor> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<List<Doctor>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task CreateAsync(Doctor a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<Doctor> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task UpdateAsync(Doctor a)
-    {
-        throw new NotImplementedException();
-    }
+        public Task CreateAsync(Doctor a)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task DeleteAsync(Doctor a)
-    {
-        throw new NotImplementedException();
+        public Task UpdateAsync(Doctor a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(Doctor a)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

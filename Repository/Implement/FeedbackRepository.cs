@@ -2,42 +2,45 @@
 using Model.Models;
 using Repository.Context;
 
-public class FeedbackRepository : IFeedbackRepository
+namespace Repository.Implement
 {
-    private readonly InfertilityTreatmentDBContext _context;
-
-    public FeedbackRepository(InfertilityTreatmentDBContext context)
+    public class FeedbackRepository : IFeedbackRepository
     {
-        _context = context;
-    }
+        private readonly InfertilityTreatmentDBContext _context;
 
-    public async Task<List<Feedback>> GetAllAsync()
-    {
-        return await _context.Feedbacks.ToListAsync();
-    }
+        public FeedbackRepository(InfertilityTreatmentDBContext context)
+        {
+            _context = context;
+        }
 
-    public async Task<Feedback> GetByIdAsync(int id)
-    {
-        return await _context.Feedbacks.FindAsync(id);
-    }
+        public async Task<List<Feedback>> GetAllAsync()
+        {
+            return await _context.Feedbacks.ToListAsync();
+        }
 
-    public async Task AddAsync(Feedback feedback)
-    {
-        await _context.Feedbacks.AddAsync(feedback);
-    }
+        public async Task<Feedback> GetByIdAsync(int id)
+        {
+            return await _context.Feedbacks.FindAsync(id);
+        }
 
-    public void Update(Feedback feedback)
-    {
-        _context.Feedbacks.Update(feedback);
-    }
+        public async Task AddAsync(Feedback feedback)
+        {
+            await _context.Feedbacks.AddAsync(feedback);
+        }
 
-    public void Delete(Feedback feedback)
-    {
-        _context.Feedbacks.Remove(feedback);
-    }
+        public void Update(Feedback feedback)
+        {
+            _context.Feedbacks.Update(feedback);
+        }
 
-    public async Task SaveAsync()
-    {
-        await _context.SaveChangesAsync();
+        public void Delete(Feedback feedback)
+        {
+            _context.Feedbacks.Remove(feedback);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

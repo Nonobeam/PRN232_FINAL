@@ -2,42 +2,45 @@
 using Model.Models;
 using Repository.Context;
 
-public class RoleRepository : IRoleRepository
+namespace Repository.Implement
 {
-    private readonly InfertilityTreatmentDBContext _context;
-
-    public RoleRepository(InfertilityTreatmentDBContext context)
+    public class RoleRepository : IRoleRepository
     {
-        _context = context;
-    }
+        private readonly InfertilityTreatmentDBContext _context;
 
-    public async Task<List<Role>> GetAllAsync()
-    {
-        return await _context.Roles.ToListAsync();
-    }
+        public RoleRepository(InfertilityTreatmentDBContext context)
+        {
+            _context = context;
+        }
 
-    public async Task<Role> GetByIdAsync(int id)
-    {
-        return await _context.Roles.FindAsync(id);
-    }
+        public async Task<List<Role>> GetAllAsync()
+        {
+            return await _context.Roles.ToListAsync();
+        }
 
-    public async Task AddAsync(Role role)
-    {
-        await _context.Roles.AddAsync(role);
-    }
+        public async Task<Role> GetByIdAsync(int id)
+        {
+            return await _context.Roles.FindAsync(id);
+        }
 
-    public void Update(Role role)
-    {
-        _context.Roles.Update(role);
-    }
+        public async Task AddAsync(Role role)
+        {
+            await _context.Roles.AddAsync(role);
+        }
 
-    public void Delete(Role role)
-    {
-        _context.Roles.Remove(role);
-    }
+        public void Update(Role role)
+        {
+            _context.Roles.Update(role);
+        }
 
-    public async Task SaveAsync()
-    {
-        await _context.SaveChangesAsync();
+        public void Delete(Role role)
+        {
+            _context.Roles.Remove(role);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
