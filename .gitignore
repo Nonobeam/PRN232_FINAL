@@ -21,7 +21,6 @@ _ReSharper*/
 .vs/
 *.dbmdl
 *.bak
-*.sql
 *.pdb
 
 # IIS Express
