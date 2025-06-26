@@ -12,29 +12,30 @@ namespace Service.Implement
             _repository = repository;
         }
 
-        public Task<List<Services>> GetAllAsync()
+        public async Task<List<Services>> GetAllAsync()
         {
-            return _repository.GetAllAsync();
+            return await _repository.GetAllAsync();
         }
 
-        public Task<Services> GetByIdAsync(int id)
+        public async Task<Services> GetByIdAsync(int id)
         {
-            return _repository.GetByIdAsync(id);
+            return await _repository.GetByIdAsync(id);
         }
 
-        public Task CreateAsync(Services service)
+        public async Task CreateAsync(Services a)
         {
-            return _repository.AddAsync(service);
+            await _repository.AddAsync(a);
+            await _repository.SaveAsync();
         }
 
-        public Task UpdateAsync(Services service)
+        public async Task UpdateAsync(Services a)
         {
-            return _repository.UpdateAsync(service);
+            await _repository.UpdateAsync(a);
         }
 
-        public Task DeleteAsync(Services service)
+        public async Task DeleteAsync(Services a)
         {
-            return _repository.DeleteAsync(service);
+            await _repository.DeleteAsync(a);
         }
     }
 }

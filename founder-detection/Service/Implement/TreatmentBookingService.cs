@@ -12,44 +12,32 @@ namespace Service.Implement
             _repository = repository;
         }
 
-        public Task<List<TreatmentBooking>> GetAllAsync()
+        public async Task<List<TreatmentBooking>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _repository.GetAllAsync();
         }
 
-        public Task<TreatmentBooking> GetByIdAsync(int id)
+        public async Task<TreatmentBooking> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetByIdAsync(id);
         }
 
-        public Task CreateAsync(TreatmentBooking a)
+        public async Task CreateAsync(TreatmentBooking a)
         {
-            throw new NotImplementedException();
+            await _repository.AddAsync(a);
+            await _repository.SaveAsync();
         }
 
-        public Task UpdateAsync(TreatmentBooking a)
+        public async Task UpdateAsync(TreatmentBooking a)
         {
-            throw new NotImplementedException();
+            _repository.Update(a);
+            await _repository.SaveAsync();
         }
 
-        public Task DeleteAsync(TreatmentBooking a)
+        public async Task DeleteAsync(TreatmentBooking a)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
+            _repository.Delete(a);
+            await _repository.SaveAsync();
         }
     }
 }

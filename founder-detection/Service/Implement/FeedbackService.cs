@@ -12,29 +12,32 @@ namespace Service.Implement
             _repository = repository;
         }
 
-        public Task<List<Feedback>> GetAllAsync()
+        public async Task<List<Feedback>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _repository.GetAllAsync();
         }
 
-        public Task<Feedback> GetByIdAsync(int id)
+        public async Task<Feedback> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetByIdAsync(id);
         }
 
-        public Task CreateAsync(Feedback a)
+        public async Task CreateAsync(Feedback a)
         {
-            throw new NotImplementedException();
+            await _repository.AddAsync(a);
+            await _repository.SaveAsync();
         }
 
-        public Task UpdateAsync(Feedback a)
+        public async Task UpdateAsync(Feedback a)
         {
-            throw new NotImplementedException();
+            _repository.Update(a);
+            await _repository.SaveAsync();
         }
 
-        public Task DeleteAsync(Feedback a)
+        public async Task DeleteAsync(Feedback a)
         {
-            throw new NotImplementedException();
+            _repository.Delete(a);
+            await _repository.SaveAsync();
         }
     }
 }
