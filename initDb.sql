@@ -1,3 +1,6 @@
+USE master
+GO
+
 -- Create the database
 CREATE DATABASE InfertilityTreatmentDB;
 GO
@@ -93,6 +96,7 @@ CREATE TABLE BlogPosts (
     CreatedBy INT FOREIGN KEY REFERENCES Users(UserId),
     CreatedAt DATETIME DEFAULT GETDATE()
 );
+GO
 
 -- Dashboard View (example)
 CREATE VIEW vw_TreatmentStats AS
