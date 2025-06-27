@@ -10,5 +10,6 @@ namespace Repository
         void Update(User user);
         void Delete(User user);
         Task SaveAsync();
+        Task<User> GetByEmailAndPasswordAsync(string email, string password);
     }
 }

@@ -1,6 +1,12 @@
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Model.Models;
 using Service;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using WebAPI.DTO;
 
 namespace WebAPI.Controllers;
 
@@ -62,5 +68,54 @@ public class UserController : ControllerBase
         await _userService.DeleteAsync(user);
 
         return NoContent();
+    }
+
+    [HttpPost("Login")]
+    public async Task<ActionResult> Login([FromBody] LoginRequest request)
+    {
+        try
+        {
+            var account = await _userService.Login(request.Email, request.Password);
+            if (account == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true).Build();
+
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, account.Email),
+                    new Claim("Role", account.Role.Name),
+                    new Claim("UserId", account.UserId.ToString()),
+                };
+
+            var symetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]));
+            var signCredential = new SigningCredentials(symetricKey, SecurityAlgorithms.HmacSha256);
+
+            var preparedToken = new JwtSecurityToken(
+                issuer: configuration["JWT:Issuer"],
+                audience: configuration["JWT:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(16),
+                signingCredentials: signCredential);
+
+            var generatedToken = new JwtSecurityTokenHandler().WriteToken(preparedToken);
+            var role = account.Role.Name;
+            var accountId = account.UserId.ToString();
+
+            return Ok(new LoginResponse
+            {
+                RoleName = role,
+                Token = generatedToken,
+                AccountId = accountId
+            });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }

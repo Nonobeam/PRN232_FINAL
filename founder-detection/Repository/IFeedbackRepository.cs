@@ -7,8 +7,7 @@ namespace Repository
         Task<List<Feedback>> GetAllAsync();
         Task<Feedback> GetByIdAsync(int id);
         Task AddAsync(Feedback feedback);
-        void Update(Feedback feedback);
-        void Delete(Feedback feedback);
-        Task SaveAsync();
+        Task UpdateAsync(Feedback feedback);
+        Task DeleteAsync(Feedback feedback);
     }
 }

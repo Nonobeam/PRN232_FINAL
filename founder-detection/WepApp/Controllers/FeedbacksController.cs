@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model.Models;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace WepApp.Controllers
 {
     public class FeedbacksController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "https://localhost:5001/api/feedbacks";
+        private readonly string _apiBaseUrl = "https://localhost:7170/api/feedbacks";
 
         public FeedbacksController(HttpClient httpClient)
         {

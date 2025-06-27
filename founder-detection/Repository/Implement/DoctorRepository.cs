@@ -26,19 +26,22 @@ namespace Repository.Implement
         public async Task AddAsync(Doctor doctor)
         {
             await _context.Doctors.AddAsync(doctor);
+            await SaveAsync();
         }
 
-        public void Update(Doctor doctor)
+        public async Task UpdateAsync(Doctor doctor)
         {
             _context.Doctors.Update(doctor);
+            await SaveAsync();
         }
 
-        public void Delete(Doctor doctor)
+        public async Task DeleteAsync(Doctor doctor)
         {
             _context.Doctors.Remove(doctor);
+            await SaveAsync();
         }
 
-        public async Task SaveAsync()
+        private async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }

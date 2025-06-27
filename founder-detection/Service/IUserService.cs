@@ -9,5 +9,6 @@ namespace Service
         Task CreateAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
+        Task<User> Login(string email, string password);
     }
 }

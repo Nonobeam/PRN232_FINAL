@@ -39,5 +39,10 @@ namespace Service.Implement
             _repository.Delete(user);
             await _repository.SaveAsync();
         }
+
+        public async Task<User> Login(string email, string password)
+        {
+            return await _repository.GetByEmailAndPasswordAsync(email, password);
+        }
     }
 }

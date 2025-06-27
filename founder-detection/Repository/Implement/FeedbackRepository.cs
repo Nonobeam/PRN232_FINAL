@@ -26,19 +26,22 @@ namespace Repository.Implement
         public async Task AddAsync(Feedback feedback)
         {
             await _context.Feedbacks.AddAsync(feedback);
+            await SaveAsync();
         }
 
-        public void Update(Feedback feedback)
+        public async Task UpdateAsync(Feedback feedback)
         {
             _context.Feedbacks.Update(feedback);
+            await SaveAsync();
         }
 
-        public void Delete(Feedback feedback)
+        public async Task DeleteAsync(Feedback feedback)
         {
             _context.Feedbacks.Remove(feedback);
+            await SaveAsync();
         }
 
-        public async Task SaveAsync()
+        private async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }
