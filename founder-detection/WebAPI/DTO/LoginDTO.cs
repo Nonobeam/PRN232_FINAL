@@ -1,9 +1,23 @@
 ﻿namespace WebAPI.DTO
 {
+    public class LoginRequest
+    {
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+
+        public LoginRequest() { }
+
+        public LoginRequest(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
+    }
+
     public class LoginResponse
     {
-        public string Token { get; set; }
-        public string RoleName { get; set; }
-        public string AccountId { get; set; }
+        public required string Token { get; set; }
+        public required string RoleName { get; set; }
+        public required string AccountId { get; set; }
     }
 }

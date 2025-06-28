@@ -3,29 +3,29 @@ using Model.Models;
 
 namespace WepApp.Controllers
 {
-    public class FeedbacksController : Controller
+    public class DoctorsController : Controller
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiBaseUrl;
 
-        public FeedbacksController(IHttpClientFactory factory, IConfiguration config)
+        public DoctorsController(IHttpClientFactory factory, IConfiguration configuration)
         {
             _httpClient = factory.CreateClient("ApiWithAuth");
-            _apiBaseUrl = config["ApiSettings:BaseUrl"] + config["ApiSettings:FeedbacksPath"];
+            _apiBaseUrl = configuration["ApiSettings:BaseUrl"] + configuration["ApiSettings:DoctorsPath"];
         }
 
         public async Task<IActionResult> Index()
         {
-            var feedbacks = await _httpClient.GetFromJsonAsync<List<Feedback>>(_apiBaseUrl);
-            return View(feedbacks);
+            var doctors = await _httpClient.GetFromJsonAsync<List<Doctor>>(_apiBaseUrl);
+            return View(doctors);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var feedback = await _httpClient.GetFromJsonAsync<Feedback>($"{_apiBaseUrl}/{id}");
-            if (feedback == null)
+            var doctor = await _httpClient.GetFromJsonAsync<Doctor>($"{_apiBaseUrl}/{id}");
+            if (doctor == null)
                 return NotFound();
-            return View(feedback);
+            return View(doctor);
         }
 
         public IActionResult Create()
@@ -35,38 +35,38 @@ namespace WepApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Feedback feedback)
+        public async Task<IActionResult> Create(Doctor doctor)
         {
-            var response = await _httpClient.PostAsJsonAsync(_apiBaseUrl, feedback);
+            var response = await _httpClient.PostAsJsonAsync(_apiBaseUrl, doctor);
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Index));
-            return View(feedback);
+            return View(doctor);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var feedback = await _httpClient.GetFromJsonAsync<Feedback>($"{_apiBaseUrl}/{id}");
-            if (feedback == null)
+            var doctor = await _httpClient.GetFromJsonAsync<Doctor>($"{_apiBaseUrl}/{id}");
+            if (doctor == null)
                 return NotFound();
-            return View(feedback);
+            return View(doctor);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Feedback feedback)
+        public async Task<IActionResult> Edit(int id, Doctor doctor)
         {
-            var response = await _httpClient.PutAsJsonAsync($"{_apiBaseUrl}/{id}", feedback);
+            var response = await _httpClient.PutAsJsonAsync($"{_apiBaseUrl}/{id}", doctor);
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Index));
-            return View(feedback);
+            return View(doctor);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var feedback = await _httpClient.GetFromJsonAsync<Feedback>($"{_apiBaseUrl}/{id}");
-            if (feedback == null)
+            var doctor = await _httpClient.GetFromJsonAsync<Doctor>($"{_apiBaseUrl}/{id}");
+            if (doctor == null)
                 return NotFound();
-            return View(feedback);
+            return View(doctor);
         }
 
         [HttpPost, ActionName("Delete")]

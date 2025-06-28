@@ -74,7 +74,7 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("Login")]
-    public async Task<ActionResult> Login([FromBody] LoginRequest request)
+    public async Task<ActionResult> Login([FromBody] DTO.LoginRequest request)
     {
         try
         {
