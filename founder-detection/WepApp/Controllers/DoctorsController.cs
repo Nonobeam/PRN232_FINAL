@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 
-namespace WepApp.Controllers
+namespace WebApp.Controllers
 {
     public class DoctorsController : Controller
     {

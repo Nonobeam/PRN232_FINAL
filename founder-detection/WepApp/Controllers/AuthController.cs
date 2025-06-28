@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebAPI.DTO;
 
-namespace WepApp.Controllers
+namespace WebApp.Controllers
 {
     public class AuthController : Controller
     {
@@ -63,6 +63,28 @@ namespace WepApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Auth");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View(new RegisterRequest());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var response = await _httpClient.PostAsJsonAsync(_loginApiUrl, model);
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Registration failed. Please check your data.");
+                return View(model);
+            }
+
+            return RedirectToAction("Login");
         }
     }
 }
