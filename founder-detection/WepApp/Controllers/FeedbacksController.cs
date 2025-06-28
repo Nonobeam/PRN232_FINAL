@@ -6,11 +6,12 @@ namespace WepApp.Controllers
     public class FeedbacksController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "https://localhost:7170/api/feedbacks";
+        private readonly string _apiBaseUrl;
 
-        public FeedbacksController(HttpClient httpClient)
+        public FeedbacksController(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _apiBaseUrl = configuration["ApiSettings:ApiBaseUrl"];
         }
 
         public async Task<IActionResult> Index()

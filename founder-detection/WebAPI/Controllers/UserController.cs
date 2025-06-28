@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ using WebAPI.DTO;
 
 namespace WebAPI.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class UserController : ControllerBase
@@ -70,6 +72,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    [AllowAnonymous]
     [HttpPost("Login")]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
