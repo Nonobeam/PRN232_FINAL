@@ -25,19 +25,16 @@ namespace Service.Implement
         public async Task CreateAsync(Feedback a)
         {
             await _repository.AddAsync(a);
-            await _repository.SaveAsync();
         }
 
         public async Task UpdateAsync(Feedback a)
         {
-            _repository.Update(a);
-            await _repository.SaveAsync();
+            await _repository.UpdateAsync(a);
         }
 
         public async Task DeleteAsync(Feedback a)
         {
-            _repository.Delete(a);
-            await _repository.SaveAsync();
+            await _repository.DeleteAsync(a);
         }
     }
 }
