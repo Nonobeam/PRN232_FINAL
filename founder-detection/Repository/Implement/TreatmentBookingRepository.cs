@@ -15,7 +15,33 @@ namespace Repository.Implement
 
         public async Task<List<TreatmentBooking>> GetAllAsync()
         {
-            return await _context.TreatmentBookings.ToListAsync();
+            return await _context.TreatmentBookings
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
+        }
+
+        public async Task<List<TreatmentBooking>> GetAllByUserIdAsync(int userId)
+        {
+            return await _context.TreatmentBookings
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
+        }
+
+        public async Task<List<TreatmentBooking>> GetAlByDoctorIdlAsync(int doctorId)
+        {
+            return await _context.TreatmentBookings
+                .Where(b => b.DoctorId == doctorId)
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
+        }
+
+        public async Task<List<TreatmentBooking>> GetAllByServiceIdAsync(int serviceId)
+        {
+            return await _context.TreatmentBookings
+                .Where(b => b.ServiceId == serviceId)
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
         }
 
         public async Task<TreatmentBooking> GetByIdAsync(int id)
