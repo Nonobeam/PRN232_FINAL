@@ -10,25 +10,32 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class FeedbacksController : ControllerBase
 {
-    private readonly IFeedbackService _ifeedbackService;
+    private readonly IFeedbackService _iFeedbackService;
 
     public FeedbacksController(IFeedbackService feedbackService)
     {
-        _ifeedbackService = feedbackService;
+        _iFeedbackService = feedbackService;
     }
 
     // GET: api/Feedbacks
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Feedback>>> GetFeedbacks()
+    public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacks()
     {
-        return await _ifeedbackService.GetAllAsync();
+        return await _iFeedbackService.GetAllAsync();
+    }
+
+    // GET: api/Feedbacks/doctor/2
+    [HttpGet("doctor/{doctorId}")]
+    public async Task<ActionResult<IEnumerable<Feedback>>> GetFeedbacksByDoctorId(int doctorId)
+    {
+        return await _iFeedbackService.GetAllByDoctorIdAsync(doctorId);
     }
 
     // GET: api/Feedbacks/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Feedback>> GetFeedback(int id)
     {
-        var feedback = await _ifeedbackService.GetByIdAsync(id);
+        var feedback = await _iFeedbackService.GetByIdAsync(id);
 
         if (feedback == null)
         {
@@ -39,7 +46,6 @@ public class FeedbacksController : ControllerBase
     }
 
     // PUT: api/Feedbacks/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> PutFeedback(int id, Feedback feedback)
     {
@@ -48,17 +54,16 @@ public class FeedbacksController : ControllerBase
             return BadRequest();
         }
 
-        await _ifeedbackService.UpdateAsync(feedback);
+        await _iFeedbackService.UpdateAsync(feedback);
 
         return NoContent();
     }
 
     // POST: api/Feedbacks
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<Feedback>> PostFeedback(Feedback feedback)
     {
-        await _ifeedbackService.CreateAsync(feedback);
+        await _iFeedbackService.CreateAsync(feedback);
 
         return CreatedAtAction("GetFeedback", new { id = feedback.FeedbackId }, feedback);
     }
@@ -67,13 +72,13 @@ public class FeedbacksController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFeedback(int id)
     {
-        var feedback = await _ifeedbackService.GetByIdAsync(id);
+        var feedback = await _iFeedbackService.GetByIdAsync(id);
         if (feedback == null)
         {
             return NotFound();
         }
 
-        await _ifeedbackService.DeleteAsync(feedback);
+        await _iFeedbackService.DeleteAsync(feedback);
 
         return NoContent();
     }

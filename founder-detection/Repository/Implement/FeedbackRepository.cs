@@ -15,7 +15,17 @@ namespace Repository.Implement
 
         public async Task<List<Feedback>> GetAllAsync()
         {
-            return await _context.Feedbacks.ToListAsync();
+            return await _context.Feedbacks
+                .OrderByDescending(f => f.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<List<Feedback>> GetAllByDoctorIdAsync(int doctorId)
+        {
+            return await _context.Feedbacks
+                .Where(f => f.DoctorId == doctorId)
+                .OrderByDescending(f => f.CreatedAt)
+                .ToListAsync();
         }
 
         public async Task<Feedback> GetByIdAsync(int id)
