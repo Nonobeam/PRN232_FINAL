@@ -101,17 +101,33 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddAuthorization(options =>
 {
-
+    //1 = Admin
+    //2 = Manager
+    //3 = Doctor
+    //4 = Customer
     options.AddPolicy("AdminOnly",
         policyBuilder => policyBuilder.RequireAssertion(
             context => context.User.HasClaim(claim => claim.Type == "Role") &&
             context.User.FindFirst(claim => claim.Type == "Role").Value == "1"));
 
-    options.AddPolicy("AdminOrStaffOrMember",
+    options.AddPolicy("AdminOrManager",
         policyBuilder => policyBuilder.RequireAssertion(
             context => context.User.HasClaim(claim => claim.Type == "Role")
             && (context.User.FindFirst(claim => claim.Type == "Role").Value == "1"
-            || context.User.FindFirst(claim => claim.Type == "Role").Value == "3"
+            || context.User.FindFirst(claim => claim.Type == "Role").Value == "2")));
+
+    options.AddPolicy("AdminOrManagerOrDoctor",
+        policyBuilder => policyBuilder.RequireAssertion(
+            context => context.User.HasClaim(claim => claim.Type == "Role")
+            && (context.User.FindFirst(claim => claim.Type == "Role").Value == "1"
+            || context.User.FindFirst(claim => claim.Type == "Role").Value == "2"
+            || context.User.FindFirst(claim => claim.Type == "Role").Value == "3")));
+
+    options.AddPolicy("AdminOrManagerOrCustomer",
+        policyBuilder => policyBuilder.RequireAssertion(
+            context => context.User.HasClaim(claim => claim.Type == "Role")
+            && (context.User.FindFirst(claim => claim.Type == "Role").Value == "1"
+            || context.User.FindFirst(claim => claim.Type == "Role").Value == "2"
             || context.User.FindFirst(claim => claim.Type == "Role").Value == "4")));
 });
 

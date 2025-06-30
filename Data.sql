@@ -3,29 +3,28 @@ USE InfertilityTreatmentDB;
 GO
 
 INSERT INTO Roles (Name) VALUES
-(N'Guest'),
-(N'Customer'),
-(N'Doctor'),
+(N'Admin'),
 (N'Manager'),
-(N'Admin');
+(N'Doctor'),
+(N'Customer');
 
--- Khách hàng
+-- Khách hàng (pass: 123456)
 INSERT INTO Users (RoleId, FullName, Email, PhoneNumber, Gender, DOB, PasswordHash)
 VALUES 
-(2, N'Nguyễn Thị A', 'nguyentha@example.com', '0912345678', N'Nữ', '1990-05-20', 'hash1'),
-(2, N'Trần Văn B', 'tranvanb@example.com', '0987654321', N'Nam', '1985-11-15', 'hash2');
+(4, N'Nguyễn Thị A', 'user1@gmail.com', '0912345678', N'Nữ', '1990-05-20', '1ZirBhtmtV21yx1u7cf7PJlSrstaNvQPIy7vTcjXs95kPS3qx6koyoeGspnF+MM7'),
+(4, N'Trần Văn B', 'user2@gmail.com', '0987654321', N'Nam', '1985-11-15', '1ZirBhtmtV21yx1u7cf7PJlSrstaNvQPIy7vTcjXs95kPS3qx6koyoeGspnF+MM7');
 
 -- Bác sĩ
 INSERT INTO Users (RoleId, FullName, Email, PhoneNumber, Gender, DOB, PasswordHash)
 VALUES 
-(3, N'BS. Lê Văn C', 'bsc@example.com', '0901234567', N'Nam', '1975-08-10', 'hash3'),
-(3, N'BS. Nguyễn Thị D', 'bsd@example.com', '0909876543', N'Nữ', '1980-03-25', 'hash4');
+(3, N'BS. Lê Văn C', 'doctor1@gmail.com', '0901234567', N'Nam', '1975-08-10', '1ZirBhtmtV21yx1u7cf7PJlSrstaNvQPIy7vTcjXs95kPS3qx6koyoeGspnF+MM7'),
+(3, N'BS. Nguyễn Thị D', 'doctor2@gmail.com', '0909876543', N'Nữ', '1980-03-25', '1ZirBhtmtV21yx1u7cf7PJlSrstaNvQPIy7vTcjXs95kPS3qx6koyoeGspnF+MM7');
 
 -- Quản lý & Admin
 INSERT INTO Users (RoleId, FullName, Email, PhoneNumber, Gender, DOB, PasswordHash)
 VALUES
-(4, N'Ngô Quản Lý', 'manager@example.com', '0933333333', N'Nam', '1982-06-15', 'hash5'),
-(5, N'Phạm Quản Trị', 'admin@example.com', '0944444444', N'Nữ', '1979-01-05', 'hash6');
+(2, N'Ngô Quản Lý', 'manager@example.com', '0933333333', N'Nam', '1982-06-15', '1ZirBhtmtV21yx1u7cf7PJlSrstaNvQPIy7vTcjXs95kPS3qx6koyoeGspnF+MM7'),
+(1, N'Phạm Quản Trị', 'admin@example.com', '0944444444', N'Nữ', '1979-01-05', '1ZirBhtmtV21yx1u7cf7PJlSrstaNvQPIy7vTcjXs95kPS3qx6koyoeGspnF+MM7');
 
 -- Giả định UserId 3 và 4 là bác sĩ
 INSERT INTO Doctors (UserId, Specialization, Degree, YearsOfExperience, WorkSchedule)
