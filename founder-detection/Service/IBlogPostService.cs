@@ -5,6 +5,7 @@ namespace Service
     public interface IBlogPostService
     {
         Task<List<BlogPost>> GetAllAsync();
+        Task<List<BlogPost>> GetAllByUserIdAsync(int userId);
         Task<BlogPost> GetByIdAsync(int id);
         Task CreateAsync(BlogPost a);
         Task UpdateAsync(BlogPost a);

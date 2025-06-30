@@ -17,6 +17,11 @@ namespace Service.Implement
             return await _repository.GetAllAsync();
         }
 
+        public async Task<List<BlogPost>> GetAllByUserIdAsync(int userId)
+        {
+            return await _repository.GetAllByUserIdAsync(userId);
+        }
+
         public async Task<BlogPost> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);

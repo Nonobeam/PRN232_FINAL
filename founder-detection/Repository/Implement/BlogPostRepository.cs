@@ -15,7 +15,17 @@ namespace Repository.Implement
 
         public async Task<List<BlogPost>> GetAllAsync()
         {
-            return await _context.BlogPosts.ToListAsync();
+            return await _context.BlogPosts
+                .OrderByDescending(b => b.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<List<BlogPost>> GetAllByUserIdAsync(int userId)
+        {
+            return await _context.BlogPosts
+                .OrderByDescending(b => b.CreatedAt)
+                .Where(b => b.CreatedBy == userId)
+                .ToListAsync();
         }
 
         public async Task<BlogPost> GetByIdAsync(int id)
