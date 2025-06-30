@@ -17,6 +17,16 @@ namespace Service.Implement
             return await _repository.GetAllAsync();
         }
 
+        public async Task<List<MedicalRecord>> GetAllByBookingIdAsync(int bookingId)
+        {
+            return await _repository.GetAllByBookingIdAsync(bookingId);
+        }
+
+        public async Task<List<MedicalRecord>> GetAllByDoctorIdAsync(int doctorId)
+        {
+            return await _repository.GetAllByDoctorIdAsync(doctorId);
+        }
+
         public async Task<MedicalRecord> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
