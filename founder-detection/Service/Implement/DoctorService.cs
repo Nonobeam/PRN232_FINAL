@@ -22,6 +22,11 @@ namespace Service.Implement
             return await _repository.GetByIdAsync(id);
         }
 
+        public async Task<Doctor> GetByUserIdAsync(int userId)
+        {
+            return await _repository.GetByUserIdAsync(userId);
+        }
+
         public async Task CreateAsync(Doctor a)
         {
             await _repository.AddAsync(a);

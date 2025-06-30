@@ -23,7 +23,13 @@ namespace Repository.Implement
             return await _context.Doctors.FindAsync(id);
         }
 
-        public async Task AddAsync(Doctor doctor)
+        public async Task<Doctor> GetByUserIdAsync(int userId)
+        { 
+            return await _context.Doctors
+                .Where(d => d.UserId == userId)
+                .FirstOrDefaultAsync();
+        }
+    public async Task AddAsync(Doctor doctor)
         {
             await _context.Doctors.AddAsync(doctor);
             await SaveAsync();

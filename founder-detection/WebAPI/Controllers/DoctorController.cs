@@ -10,48 +10,48 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class DoctorController : ControllerBase
 {
-    private readonly IDoctorService _idoctorService;
+    private readonly IDoctorService _iDoctorService;
 
     public DoctorController(IDoctorService doctorService)
     {
-        _idoctorService = doctorService;
+        _iDoctorService = doctorService;
     }
 
     // GET: api/Doctor
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctor()
+    public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
-        return await _idoctorService.GetAllAsync();
+        return await _iDoctorService.GetAllAsync();
     }
 
     // GET: api/Doctor/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Doctor>> GetDoctor(int id)
     {
-        var blogPost = await _idoctorService.GetByIdAsync(id);
+        return await _iDoctorService.GetByIdAsync(id);
+    }
 
-        return blogPost;
+    // GET: api/Doctor/user/5
+    [HttpGet("user/{userId}")]
+    public async Task<ActionResult<Doctor>> GetDoctorByUserId(int userId)
+    {
+        return await _iDoctorService.GetByIdAsync(userId);
     }
 
     // PUT: api/Doctor/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> PutDoctor(int id, Doctor doctor)
     {
         if (id != doctor.DoctorId) return BadRequest();
-
-        await _idoctorService.UpdateAsync(doctor);
-
+        await _iDoctorService.UpdateAsync(doctor);
         return NoContent();
     }
 
     // POST: api/Doctor
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<Doctor>> PostDoctor(Doctor doctor)
     {
-        await _idoctorService.CreateAsync(doctor);
-
+        await _iDoctorService.CreateAsync(doctor);
         return CreatedAtAction("GetDoctor", new { id = doctor.DoctorId }, doctor);
     }
 
@@ -59,8 +59,7 @@ public class DoctorController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctor(Doctor doctor)
     {
-        await _idoctorService.DeleteAsync(doctor);
-
+        await _iDoctorService.DeleteAsync(doctor);
         return NoContent();
     }
 }
