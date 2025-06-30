@@ -11,7 +11,7 @@ using WebAPI.DTO;
 
 namespace WebAPI.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class UserController : ControllerBase
@@ -40,7 +40,6 @@ public class UserController : ControllerBase
     }
 
     // PUT: api/User/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(int id, User user)
     {
@@ -52,7 +51,6 @@ public class UserController : ControllerBase
     }
 
     // POST: api/User
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<User>> PostUser(User user)
     {
@@ -91,7 +89,7 @@ public class UserController : ControllerBase
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, account.Email),
-                    new Claim("Role", account.Role.Name),
+                    new Claim("Role", account.Role.RoleId.ToString()),
                     new Claim("UserId", account.UserId.ToString()),
                 };
 
