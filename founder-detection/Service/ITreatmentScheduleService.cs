@@ -5,6 +5,7 @@ namespace Service
     public interface ITreatmentScheduleService
     {
         Task<List<TreatmentSchedule>> GetAllAsync();
+        Task<List<TreatmentSchedule>> GetAllByBookingIdAsync(int bookingId);
         Task<TreatmentSchedule> GetByIdAsync(int id);
         Task CreateAsync(TreatmentSchedule a);
         Task UpdateAsync(TreatmentSchedule a);
