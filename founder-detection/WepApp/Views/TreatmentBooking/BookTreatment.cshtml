@@ -1,0 +1,205 @@
+@model WebApp.Models.BookTreatmentViewModel
+@{
+    ViewData["Title"] = "Đặt lịch điều trị";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Đặt lịch điều trị hiếm muộn
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="BookTreatment" method="post" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ServiceId" class="form-label">
+                                        <i class="fas fa-heartbeat me-1"></i>@Html.DisplayNameFor(m => m.ServiceId) <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ServiceId" class="form-select" required>
+                                        <option value="">-- Chọn dịch vụ điều trị --</option>
+                                        @foreach (var service in Model.AvailableServices)
+                                        {
+                                            <option value="@service.ServiceId" data-price="@service.Price">
+                                                @service.Name - @service.MethodType
+                                                @if (service.Price.HasValue)
+                                                {
+                                                    <text> (@service.Price.Value.ToString("N0") VNĐ)</text>
+                                                }
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="ServiceId" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="DoctorId" class="form-label">
+                                        <i class="fas fa-user-md me-1"></i>@Html.DisplayNameFor(m => m.DoctorId) <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="DoctorId" class="form-select" required>
+                                        <option value="">-- Chọn bác sĩ điều trị --</option>
+                                        @foreach (var doctor in Model.AvailableDoctors)
+                                        {
+                                            <option value="@doctor.DoctorId" 
+                                                    data-specialization="@doctor.Specialization"
+                                                    data-experience="@doctor.YearsOfExperience"
+                                                    data-schedule="@doctor.WorkSchedule">
+                                                @doctor.FullName - @doctor.Specialization
+                                                @if (doctor.YearsOfExperience.HasValue)
+                                                {
+                                                    <text> (@doctor.YearsOfExperience năm kinh nghiệm)</text>
+                                                }
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="DoctorId" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Notes" class="form-label">
+                                        <i class="fas fa-sticky-note me-1"></i>@Html.DisplayNameFor(m => m.Notes)
+                                    </label>
+                                    <textarea asp-for="Notes" class="form-control" rows="4" 
+                                              placeholder="Nhập ghi chú về tình trạng sức khỏe, yêu cầu đặc biệt hoặc câu hỏi cho bác sĩ..."></textarea>
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
+                                    <div class="form-text">Tối đa 500 ký tự</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <!-- Service Information Panel -->
+                                <div class="card mb-3" id="serviceInfo" style="display: none;">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0"><i class="fas fa-info-circle me-1"></i>Thông tin dịch vụ</h6>
+                                    </div>
+                                    <div class="card-body" id="serviceDetails">
+                                        <!-- Service details will be populated by JavaScript -->
+                                    </div>
+                                </div>
+
+                                <!-- Doctor Information Panel -->
+                                <div class="card mb-3" id="doctorInfo" style="display: none;">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0"><i class="fas fa-user-md me-1"></i>Thông tin bác sĩ</h6>
+                                    </div>
+                                    <div class="card-body" id="doctorDetails">
+                                        <!-- Doctor details will be populated by JavaScript -->
+                                    </div>
+                                </div>
+
+                                <!-- Important Notes -->
+                                <div class="card">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h6 class="mb-0"><i class="fas fa-exclamation-triangle me-1"></i>Lưu ý quan trọng</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="mb-0">
+                                            <li>Vui lòng đến đúng giờ hẹn</li>
+                                            <li>Mang theo các kết quả xét nghiệm gần nhất (nếu có)</li>
+                                            <li>Thông báo trước nếu cần hủy/đổi lịch hẹn</li>
+                                            <li>Chuẩn bị tinh thần thoải mái cho quá trình điều trị</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between">
+                                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left me-1"></i>Quay lại
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-calendar-plus me-1"></i>Đặt lịch điều trị
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Service selection change handler
+            $('#ServiceId').change(function() {
+                var selectedOption = $(this).find('option:selected');
+                if (selectedOption.val()) {
+                    var serviceName = selectedOption.text().split(' - ')[0];
+                    var methodType = selectedOption.text().split(' - ')[1]?.split(' (')[0];
+                    var price = selectedOption.data('price');
+                    
+                    var serviceHtml = '<h6>' + serviceName + '</h6>';
+                    serviceHtml += '<p><strong>Phương pháp:</strong> ' + methodType + '</p>';
+                    if (price) {
+                        serviceHtml += '<p><strong>Chi phí:</strong> ' + price.toLocaleString('vi-VN') + ' VNĐ</p>';
+                    }
+                    
+                    $('#serviceDetails').html(serviceHtml);
+                    $('#serviceInfo').show();
+                } else {
+                    $('#serviceInfo').hide();
+                }
+            });
+
+            // Doctor selection change handler
+            $('#DoctorId').change(function() {
+                var selectedOption = $(this).find('option:selected');
+                if (selectedOption.val()) {
+                    var doctorName = selectedOption.text().split(' - ')[0];
+                    var specialization = selectedOption.data('specialization');
+                    var experience = selectedOption.data('experience');
+                    var schedule = selectedOption.data('schedule');
+                    
+                    var doctorHtml = '<h6>' + doctorName + '</h6>';
+                    doctorHtml += '<p><strong>Chuyên khoa:</strong> ' + specialization + '</p>';
+                    if (experience) {
+                        doctorHtml += '<p><strong>Kinh nghiệm:</strong> ' + experience + ' năm</p>';
+                    }
+                    if (schedule) {
+                        doctorHtml += '<p><strong>Lịch làm việc:</strong> ' + schedule + '</p>';
+                    }
+                    
+                    $('#doctorDetails').html(doctorHtml);
+                    $('#doctorInfo').show();
+                } else {
+                    $('#doctorInfo').hide();
+                }
+            });
+
+            // Character counter for notes
+            $('#Notes').on('input', function() {
+                var length = $(this).val().length;
+                var maxLength = 500;
+                var remaining = maxLength - length;
+                
+                if (remaining < 0) {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+}

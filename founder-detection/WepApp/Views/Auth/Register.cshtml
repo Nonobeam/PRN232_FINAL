@@ -10,6 +10,14 @@
             <h2 class="text-center mb-4">Register</h2>
 
             <form asp-controller="Auth" asp-action="Register" method="post">
+                <!-- Hidden field to ensure Customer role -->
+                <input asp-for="RoleId" type="hidden" value="4" />
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Patient Registration:</strong> You are registering as a patient to access our fertility treatment services.
+                </div>
+
                 <div class="form-group mb-3">
                     <label asp-for="FullName"></label>
                     <input asp-for="FullName" class="form-control" />

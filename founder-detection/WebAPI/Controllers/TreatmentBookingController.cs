@@ -44,6 +44,18 @@ namespace WebAPI.Controllers
             return await _iTreatmentBookingService.GetAllByServiceIdAsync(serviceId);
         }
 
+        // GET: api/TreatmentBooking/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TreatmentBooking>> GetTreatmentBooking(int id)
+        {
+            var booking = await _iTreatmentBookingService.GetByIdAsync(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+            return booking;
+        }
+
         // PUT: api/TreatmentBooking/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTreatmentBooking(int id, TreatmentBooking treatmentBooking)
@@ -61,7 +73,7 @@ namespace WebAPI.Controllers
         {
             await _iTreatmentBookingService.CreateAsync(treatmentBooking);
 
-            return CreatedAtAction("GetTreatmentBooking", new { id = treatmentBooking.BookingId }, treatmentBooking);
+            return Ok(new { message = "Booking created successfully", bookingId = treatmentBooking.BookingId });
         }
 
         // DELETE: api/TreatmentBooking/5

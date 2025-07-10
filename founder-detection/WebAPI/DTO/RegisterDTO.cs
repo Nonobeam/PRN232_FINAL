@@ -4,7 +4,7 @@ namespace WebAPI.DTO
 {
     public class RegisterRequest
     {
-        public int RoleId { get; set; } = 2;
+        public int RoleId { get; set; } = 4; // Default to Customer role for public registration
 
         [Required]
         public string FullName { get; set; } = string.Empty;

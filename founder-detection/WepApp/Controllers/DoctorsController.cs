@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model.Models;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
@@ -16,13 +17,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var doctors = await _httpClient.GetFromJsonAsync<List<Doctor>>(_apiBaseUrl);
+            var doctors = await _httpClient.GetFromJsonAsync<List<DoctorDTO>>(_apiBaseUrl);
             return View(doctors);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var doctor = await _httpClient.GetFromJsonAsync<Doctor>($"{_apiBaseUrl}/{id}");
+            var doctor = await _httpClient.GetFromJsonAsync<DoctorDTO>($"{_apiBaseUrl}/{id}");
             if (doctor == null)
                 return NotFound();
             return View(doctor);

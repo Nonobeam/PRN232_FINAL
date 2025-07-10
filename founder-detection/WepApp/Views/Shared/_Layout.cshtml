@@ -3,35 +3,128 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WepApp</title>
+    <title>@ViewData["Title"] - Infertility Treatment Management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WepApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WepApp</a>
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-heartbeat me-2"></i>
+                    Fertility Care Center
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>Dashboard
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Doctors" asp-action="Index">Doctors</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Feedbacks" asp-action="Index">Feedbacks</a>
-                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+                            @if (userRole == "Admin" || userRole == "Manager")
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cogs me-1"></i>Management
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="managementDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Users" asp-action="Index">
+                                            <i class="fas fa-users me-2"></i>Users
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-controller="Doctors" asp-action="Index">
+                                            <i class="fas fa-user-md me-2"></i>Doctors
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">
+                                            <i class="fas fa-cog me-2"></i>Services
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#">
+                                            <i class="fas fa-calendar-alt me-2"></i>Bookings
+                                        </a></li>
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (userRole == "Doctor")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-calendar-check me-1"></i>My Schedule
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-file-medical me-1"></i>Medical Records
+                                    </a>
+                                </li>
+                            }
+
+                            @if (userRole == "Customer")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="TreatmentBooking" asp-action="BookTreatment">
+                                        <i class="fas fa-plus me-1"></i>Book Treatment
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="TreatmentBooking" asp-action="MyBookings">
+                                        <i class="fas fa-calendar-alt me-1"></i>My Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Doctors" asp-action="Index">
+                                        <i class="fas fa-user-md me-1"></i>Our Doctors
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Feedbacks" asp-action="Index">
+                                    <i class="fas fa-star me-1"></i>Feedback
+                                </a>
+                            </li>
+                        }
                     </ul>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle me-1"></i>
+                                    @User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="#">
+                                        <i class="fas fa-user me-2"></i>Profile
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#">
+                                        <i class="fas fa-cog me-2"></i>Settings
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
@@ -42,9 +135,30 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="bg-light border-top mt-5 py-4">
         <div class="container">
-            &copy; 2025 - WepApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-primary">
+                        <i class="fas fa-heartbeat me-2"></i>
+                        Fertility Care Center
+                    </h6>
+                    <p class="text-muted small mb-0">
+                        Comprehensive infertility treatment and monitoring system.
+                        Your journey to parenthood starts here.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted small mb-0">
+                        &copy; 2025 Fertility Care Center. All rights reserved.
+                    </p>
+                    <p class="text-muted small mb-0">
+                        <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy Policy</a> |
+                        <a href="#" class="text-decoration-none">Terms of Service</a> |
+                        <a href="#" class="text-decoration-none">Contact Us</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,8 +1,457 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model WebApp.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">Welcome back, @Model.UserName</h1>
+                    <p class="text-muted">@Model.UserRole Dashboard</p>
+                </div>
+                <div class="text-end">
+                    <small class="text-muted">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role-Specific Dashboard Content -->
+    @if (Model.UserRole == "Admin")
+    {
+        <!-- Admin Dashboard -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalUsers</h4>
+                                <p class="card-text">Total Users</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-users fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalDoctors</h4>
+                                <p class="card-text">Total Doctors</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-user-md fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalBookings</h4>
+                                <p class="card-text">Total Bookings</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalServices</h4>
+                                <p class="card-text">Available Services</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-cogs fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("Index", "Users")" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-users me-2"></i>Manage Users
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("Index", "Doctors")" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-user-md me-2"></i>Manage Doctors
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-chart-bar me-2"></i>View Reports
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-cog me-2"></i>System Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.UserRole == "Manager")
+    {
+        <!-- Manager Dashboard -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalBookings</h4>
+                                <p class="card-text">Total Bookings</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalServices</h4>
+                                <p class="card-text">Active Services</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-cogs fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TotalDoctors</h4>
+                                <p class="card-text">Available Doctors</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-user-md fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manager Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Management Tools</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-calendar-alt me-2"></i>Booking Management
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-cogs me-2"></i>Service Management
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("Index", "Doctors")" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-user-md me-2"></i>Doctor Schedules
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("Index", "Feedbacks")" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-star me-2"></i>View Feedback
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.UserRole == "Doctor")
+    {
+        <!-- Doctor Dashboard -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.MyAppointments</h4>
+                                <p class="card-text">My Appointments</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.MyMedicalRecords</h4>
+                                <p class="card-text">Medical Records</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-file-medical fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.TodayAppointments</h4>
+                                <p class="card-text">Today's Schedule</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Clinical Tools</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-calendar-alt me-2"></i>My Schedule
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-file-medical me-2"></i>Medical Records
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-users me-2"></i>My Patients
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("Index", "Feedbacks")" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-star me-2"></i>Patient Feedback
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.UserRole == "Customer")
+    {
+        <!-- Customer Dashboard -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.MyBookings</h4>
+                                <p class="card-text">My Treatments</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-heart fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.UpcomingSchedules</h4>
+                                <p class="card-text">Upcoming Events</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-calendar-plus fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">@Model.CompletedTreatments</h4>
+                                <p class="card-text">Completed</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">My Treatment Journey</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("BookTreatment", "TreatmentBooking")" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-plus me-2"></i>Book Treatment
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("MyBookings", "TreatmentBooking")" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-calendar-alt me-2"></i>My Bookings
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-file-medical-alt me-2"></i>Medical History
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="@Url.Action("Index", "Doctors")" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-user-md me-2"></i>Find Doctors
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Common Section: Recent Activity (for all roles) -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentActivities.Any())
+                    {
+                        @foreach (var activity in Model.RecentActivities)
+                        {
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="me-3">
+                                    <i class="@activity.Icon fa-lg text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">@activity.Title</h6>
+                                    <p class="mb-0 text-muted small">@activity.Description</p>
+                                    <small class="text-muted">@activity.Date.ToString("MMM dd, yyyy HH:mm")</small>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>No recent activity to display</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Links</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        @if (Model.UserRole == "Customer")
+                        {
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-info-circle me-2"></i>Treatment Information
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-blog me-2"></i>Health Blog
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-phone me-2"></i>Contact Support
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", "Users")" class="list-group-item list-group-item-action">
+                                <i class="fas fa-users me-2"></i>User Management
+                            </a>
+                            <a href="@Url.Action("Index", "Doctors")" class="list-group-item list-group-item-action">
+                                <i class="fas fa-user-md me-2"></i>Doctor Management
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-chart-bar me-2"></i>Reports
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+}

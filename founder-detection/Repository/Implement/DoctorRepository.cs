@@ -15,17 +15,22 @@ namespace Repository.Implement
 
         public async Task<List<Doctor>> GetAllAsync()
         {
-            return await _context.Doctors.ToListAsync();
+            return await _context.Doctors
+                .Include(d => d.User)
+                .ToListAsync();
         }
 
         public async Task<Doctor> GetByIdAsync(int id)
         {
-            return await _context.Doctors.FindAsync(id);
+            return await _context.Doctors
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(d => d.DoctorId == id);
         }
 
         public async Task<Doctor> GetByUserIdAsync(int userId)
-        { 
+        {
             return await _context.Doctors
+                .Include(d => d.User)
                 .Where(d => d.UserId == userId)
                 .FirstOrDefaultAsync();
         }

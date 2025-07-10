@@ -1,4 +1,4 @@
-﻿@model Model.Models.Doctor
+﻿@model WebApp.Models.DoctorDTO
 
 @{
     ViewData["Title"] = "Details";
@@ -35,10 +35,22 @@
             @Html.DisplayFor(model => model.WorkSchedule)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
+            @Html.DisplayNameFor(model => model.FullName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserId)
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
     </dl>
 </div>

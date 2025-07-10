@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 using Service;
+using WebAPI.DTO;
+using AutoMapper;
 
 namespace WebAPI.Controllers;
 
@@ -11,31 +13,52 @@ namespace WebAPI.Controllers;
 public class DoctorController : ControllerBase
 {
     private readonly IDoctorService _iDoctorService;
+    private readonly IMapper _mapper;
 
-    public DoctorController(IDoctorService doctorService)
+    public DoctorController(IDoctorService doctorService, IMapper mapper)
     {
         _iDoctorService = doctorService;
+        _mapper = mapper;
     }
 
     // GET: api/Doctor
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
+    [AllowAnonymous]
+    public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetAllDoctors()
     {
-        return await _iDoctorService.GetAllAsync();
+        var doctors = await _iDoctorService.GetAllAsync();
+        var doctorDTOs = _mapper.Map<List<DoctorDTO>>(doctors);
+        return Ok(doctorDTOs);
     }
 
     // GET: api/Doctor/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Doctor>> GetDoctor(int id)
+    [AllowAnonymous]
+    public async Task<ActionResult<DoctorDTO>> GetDoctor(int id)
     {
-        return await _iDoctorService.GetByIdAsync(id);
+        var doctor = await _iDoctorService.GetByIdAsync(id);
+        if (doctor == null)
+        {
+            return NotFound();
+        }
+
+        var doctorDTO = _mapper.Map<DoctorDTO>(doctor);
+        return Ok(doctorDTO);
     }
 
     // GET: api/Doctor/user/5
     [HttpGet("user/{userId}")]
-    public async Task<ActionResult<Doctor>> GetDoctorByUserId(int userId)
+    [AllowAnonymous]
+    public async Task<ActionResult<DoctorDTO>> GetDoctorByUserId(int userId)
     {
-        return await _iDoctorService.GetByIdAsync(userId);
+        var doctor = await _iDoctorService.GetByUserIdAsync(userId);
+        if (doctor == null)
+        {
+            return NotFound();
+        }
+
+        var doctorDTO = _mapper.Map<DoctorDTO>(doctor);
+        return Ok(doctorDTO);
     }
 
     // PUT: api/Doctor/5
