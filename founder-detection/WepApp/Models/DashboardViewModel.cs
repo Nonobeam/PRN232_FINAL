@@ -1,5 +1,6 @@
 using Model.Models;
 using System.ComponentModel.DataAnnotations;
+using WebApp.Attributes;
 
 namespace WebApp.Models
 {
@@ -45,6 +46,18 @@ namespace WebApp.Models
         [Display(Name = "Bác sĩ điều trị")]
         public int DoctorId { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng chọn ngày đặt lịch")]
+        [Display(Name = "Ngày đặt lịch")]
+        [DataType(DataType.Date)]
+        [WeekdayValidation]
+        public DateTime BookingDate { get; set; } = DateTime.Today.AddDays(1);
+
+        [Required(ErrorMessage = "Vui lòng chọn giờ đặt lịch")]
+        [Display(Name = "Giờ đặt lịch")]
+        [DataType(DataType.Time)]
+        [BusinessTimeValidation]
+        public TimeSpan BookingTime { get; set; } = new TimeSpan(8, 0, 0); // Default to 8:00 AM
+
         [Display(Name = "Ghi chú")]
         [StringLength(500, ErrorMessage = "Ghi chú không được vượt quá 500 ký tự")]
         public string Notes { get; set; } = string.Empty;
@@ -56,6 +69,9 @@ namespace WebApp.Models
         // Current user info
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
+
+        // Helper property to combine date and time
+        public DateTime CombinedDateTime => BookingDate.Date.Add(BookingTime);
     }
 
     public class DoctorViewModel
@@ -100,5 +116,77 @@ namespace WebApp.Models
         public string Action { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
         public string CssClass { get; set; } = "btn-primary";
+    }
+
+    // Treatment Management ViewModels
+    public class TreatmentManagementViewModel
+    {
+        public List<TreatmentBookingViewModel> PendingBookings { get; set; } = new List<TreatmentBookingViewModel>();
+        public List<TreatmentBookingViewModel> AcceptedBookings { get; set; } = new List<TreatmentBookingViewModel>();
+        public List<TreatmentBookingViewModel> RejectedBookings { get; set; } = new List<TreatmentBookingViewModel>();
+        public string CurrentFilter { get; set; } = "pending";
+        public int TotalPending { get; set; }
+        public int TotalAccepted { get; set; }
+        public int TotalRejected { get; set; }
+    }
+
+    public class TreatmentBookingViewModel
+    {
+        public int BookingId { get; set; }
+        public int? UserId { get; set; }
+        public int? DoctorId { get; set; }
+        public int? ServiceId { get; set; }
+        public DateTime? BookingDate { get; set; }
+        public string Status { get; set; } = string.Empty;
+
+        // Related entity information
+        public string UserName { get; set; } = string.Empty;
+        public string UserEmail { get; set; } = string.Empty;
+        public string UserPhone { get; set; } = string.Empty;
+        public string DoctorName { get; set; } = string.Empty;
+        public string DoctorSpecialization { get; set; } = string.Empty;
+        public string ServiceName { get; set; } = string.Empty;
+        public string ServiceMethodType { get; set; } = string.Empty;
+        public decimal? ServicePrice { get; set; }
+        public string ServiceDescription { get; set; } = string.Empty;
+
+        // Additional properties for management
+        public string StatusBadgeClass => Status switch
+        {
+            "Chờ xác nhận" => "bg-warning",
+            "Đã xác nhận" => "bg-success",
+            "Đã từ chối" => "bg-danger",
+            "Đã đặt lịch" => "bg-info",
+            "Hoàn thành" => "bg-primary",
+            _ => "bg-secondary"
+        };
+
+        public string StatusIcon => Status switch
+        {
+            "Chờ xác nhận" => "fas fa-clock",
+            "Đã xác nhận" => "fas fa-check-circle",
+            "Đã từ chối" => "fas fa-times-circle",
+            "Đã đặt lịch" => "fas fa-calendar-check",
+            "Hoàn thành" => "fas fa-flag-checkered",
+            _ => "fas fa-question-circle"
+        };
+    }
+
+    public class AcceptTreatmentViewModel
+    {
+        public int BookingId { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string ServiceName { get; set; } = string.Empty;
+        public string DoctorName { get; set; } = string.Empty;
+        public DateTime? BookingDate { get; set; }
+    }
+
+    public class RejectTreatmentViewModel
+    {
+        public int BookingId { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string ServiceName { get; set; } = string.Empty;
+        public string DoctorName { get; set; } = string.Empty;
+        public DateTime? BookingDate { get; set; }
     }
 }

@@ -98,6 +98,24 @@ namespace WebApp.Controllers
                 return View(model);
             }
 
+            // Additional validation for combined date and time
+            var combinedDateTime = model.CombinedDateTime;
+            var dayOfWeek = (int)combinedDateTime.DayOfWeek;
+
+            if (dayOfWeek == 0 || dayOfWeek == 6) // Sunday or Saturday
+            {
+                ModelState.AddModelError("BookingDate", "Chỉ có thể đặt lịch từ thứ 2 đến thứ 6");
+                await LoadDropdownData(model);
+                return View(model);
+            }
+
+            if (combinedDateTime <= DateTime.Now)
+            {
+                ModelState.AddModelError("BookingDate", "Ngày và giờ đặt lịch phải là thời điểm trong tương lai");
+                await LoadDropdownData(model);
+                return View(model);
+            }
+
             try
             {
                 // Create booking object
@@ -106,7 +124,7 @@ namespace WebApp.Controllers
                     UserId = userId,
                     DoctorId = model.DoctorId,
                     ServiceId = model.ServiceId,
-                    BookingDate = DateTime.Now,
+                    BookingDate = model.CombinedDateTime,
                     Status = "Chờ xác nhận"
                 };
 
@@ -153,6 +171,66 @@ namespace WebApp.Controllers
             {
                 TempData["Error"] = "Không thể tải danh sách đặt lịch. Vui lòng thử lại sau.";
                 return View(new List<TreatmentBooking>());
+            }
+        }
+
+        // GET: TreatmentBooking/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+
+            try
+            {
+                var booking = await _httpClient.GetFromJsonAsync<TreatmentBooking>($"{_apiBaseUrl}/{id}");
+
+                if (booking == null)
+                {
+                    TempData["Error"] = "Không tìm thấy thông tin đặt lịch.";
+                    return RedirectToAction("MyBookings");
+                }
+
+                // Check if user owns this booking (for customers) or is manager/admin
+                if (userRole == "Customer" && booking.UserId != userId)
+                {
+                    return Forbid();
+                }
+
+                return View(booking);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Không thể tải thông tin chi tiết đặt lịch.";
+                return RedirectToAction("MyBookings");
+            }
+        }
+
+        // GET: TreatmentBooking/DetailsPartial/5 - For AJAX calls
+        public async Task<IActionResult> DetailsPartial(int id)
+        {
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+
+            try
+            {
+                var booking = await _httpClient.GetFromJsonAsync<TreatmentBooking>($"{_apiBaseUrl}/{id}");
+
+                if (booking == null)
+                {
+                    return PartialView("_BookingDetailsPartial", null);
+                }
+
+                // Check if user owns this booking (for customers) or is manager/admin
+                if (userRole == "Customer" && booking.UserId != userId)
+                {
+                    return Forbid();
+                }
+
+                return PartialView("_BookingDetailsPartial", booking);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("_BookingDetailsPartial", null);
             }
         }
 

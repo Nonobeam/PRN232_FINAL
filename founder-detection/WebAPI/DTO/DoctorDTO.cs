@@ -30,11 +30,16 @@ namespace WebAPI.DTO
         public int? ServiceId { get; set; }
         public DateTime? BookingDate { get; set; }
         public string Status { get; set; } = string.Empty;
-        
+
         // Related entity information
         public DoctorDTO? Doctor { get; set; }
         public ServiceDTO? Service { get; set; }
         public string UserName { get; set; } = string.Empty;
         public string UserEmail { get; set; } = string.Empty;
+    }
+
+    public class UpdateStatusRequest
+    {
+        public string Status { get; set; } = string.Empty;
     }
 }

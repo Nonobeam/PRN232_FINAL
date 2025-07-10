@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 using Service;
+using WebAPI.DTO;
 
 namespace WebAPI.Controllers
 {
@@ -44,6 +45,24 @@ namespace WebAPI.Controllers
             return await _iTreatmentBookingService.GetAllByServiceIdAsync(serviceId);
         }
 
+        // GET: api/TreatmentBooking/status/{status}
+        [HttpGet("status/{status}")]
+        public async Task<ActionResult<IEnumerable<TreatmentBooking>>> GetTreatmentBookingsByStatus(string status)
+        {
+            var bookings = await _iTreatmentBookingService.GetAllAsync();
+            var filteredBookings = bookings.Where(b => b.Status == status).ToList();
+            return Ok(filteredBookings);
+        }
+
+        // GET: api/TreatmentBooking/pending
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<TreatmentBooking>>> GetPendingTreatmentBookings()
+        {
+            var bookings = await _iTreatmentBookingService.GetAllAsync();
+            var pendingBookings = bookings.Where(b => b.Status == "Chờ xác nhận").ToList();
+            return Ok(pendingBookings);
+        }
+
         // GET: api/TreatmentBooking/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TreatmentBooking>> GetTreatmentBooking(int id)
@@ -65,6 +84,29 @@ namespace WebAPI.Controllers
             await _iTreatmentBookingService.UpdateAsync(treatmentBooking);
 
             return NoContent();
+        }
+
+        // PUT: api/TreatmentBooking/5/status
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateBookingStatus(int id, [FromBody] UpdateStatusRequest request)
+        {
+            try
+            {
+                var booking = await _iTreatmentBookingService.GetByIdAsync(id);
+                if (booking == null)
+                {
+                    return NotFound();
+                }
+
+                booking.Status = request.Status;
+                await _iTreatmentBookingService.UpdateAsync(booking);
+
+                return Ok(new { message = "Status updated successfully", bookingId = id, newStatus = request.Status });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         // POST: api/TreatmentBooking

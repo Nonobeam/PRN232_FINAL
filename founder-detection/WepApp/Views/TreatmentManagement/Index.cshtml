@@ -1,0 +1,375 @@
+@model WebApp.Models.TreatmentManagementViewModel
+@{
+    ViewData["Title"] = "Quản lý đặt lịch điều trị";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="h3 mb-0">
+                        <i class="fas fa-clipboard-list me-2 text-primary"></i>
+                        Quản lý đặt lịch điều trị
+                    </h2>
+                    <p class="text-muted mb-0">Xem và xử lý các yêu cầu đặt lịch điều trị</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary" onclick="location.reload()">
+                        <i class="fas fa-sync-alt me-1"></i>Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alert Messages -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-warning mb-0">Chờ xác nhận</h5>
+                                    <h2 class="text-warning">@Model.TotalPending</h2>
+                                </div>
+                                <div class="text-warning">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success">
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-success mb-0">Đã xác nhận</h5>
+                                    <h2 class="text-success">@Model.TotalAccepted</h2>
+                                </div>
+                                <div class="text-success">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-danger">
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-danger mb-0">Đã từ chối</h5>
+                                    <h2 class="text-danger">@Model.TotalRejected</h2>
+                                </div>
+                                <div class="text-danger">
+                                    <i class="fas fa-times-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="bookingTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(Model.CurrentFilter == "pending" ? "active" : "")" 
+                                    id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" 
+                                    type="button" role="tab" aria-controls="pending" aria-selected="@(Model.CurrentFilter == "pending" ? "true" : "false")">
+                                <i class="fas fa-clock me-1"></i>
+                                Chờ xác nhận (@Model.TotalPending)
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(Model.CurrentFilter == "accepted" ? "active" : "")" 
+                                    id="accepted-tab" data-bs-toggle="tab" data-bs-target="#accepted" 
+                                    type="button" role="tab" aria-controls="accepted" aria-selected="@(Model.CurrentFilter == "accepted" ? "true" : "false")">
+                                <i class="fas fa-check-circle me-1"></i>
+                                Đã xác nhận (@Model.TotalAccepted)
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(Model.CurrentFilter == "rejected" ? "active" : "")" 
+                                    id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected" 
+                                    type="button" role="tab" aria-controls="rejected" aria-selected="@(Model.CurrentFilter == "rejected" ? "true" : "false")">
+                                <i class="fas fa-times-circle me-1"></i>
+                                Đã từ chối (@Model.TotalRejected)
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body">
+                    <div class="tab-content" id="bookingTabsContent">
+                        <!-- Pending Bookings Tab -->
+                        <div class="tab-pane fade @(Model.CurrentFilter == "pending" ? "show active" : "")" 
+                             id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                            @if (Model.PendingBookings.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-warning">
+                                            <tr>
+                                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                                                <th><i class="fas fa-user me-1"></i>Khách hàng</th>
+                                                <th><i class="fas fa-heartbeat me-1"></i>Dịch vụ</th>
+                                                <th><i class="fas fa-user-md me-1"></i>Bác sĩ</th>
+                                                <th><i class="fas fa-calendar me-1"></i>Ngày đặt</th>
+                                                <th><i class="fas fa-cogs me-1"></i>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var booking in Model.PendingBookings)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@booking.BookingId</span></td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.UserName</strong>
+                                                            <br><small class="text-muted">@booking.UserEmail</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.ServiceName</strong>
+                                                            <br><small class="text-muted">@booking.ServiceMethodType</small>
+                                                            @if (booking.ServicePrice.HasValue)
+                                                            {
+                                                                <br><small class="text-success">@booking.ServicePrice.Value.ToString("N0") VNĐ</small>
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.DoctorName</strong>
+                                                            <br><small class="text-muted">@booking.DoctorSpecialization</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if (booking.BookingDate.HasValue)
+                                                        {
+                                                            <span>@booking.BookingDate.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">N/A</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <a asp-action="Details" asp-route-id="@booking.BookingId" 
+                                                               class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
+                                                            <a asp-action="Accept" asp-route-id="@booking.BookingId" 
+                                                               class="btn btn-sm btn-success" title="Xác nhận">
+                                                                <i class="fas fa-check"></i>
+                                                            </a>
+                                                            <a asp-action="Reject" asp-route-id="@booking.BookingId" 
+                                                               class="btn btn-sm btn-danger" title="Từ chối">
+                                                                <i class="fas fa-times"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-5">
+                                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">Không có đặt lịch nào đang chờ xác nhận</h5>
+                                    <p class="text-muted">Tất cả các yêu cầu đặt lịch đã được xử lý.</p>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Accepted Bookings Tab -->
+                        <div class="tab-pane fade @(Model.CurrentFilter == "accepted" ? "show active" : "")" 
+                             id="accepted" role="tabpanel" aria-labelledby="accepted-tab">
+                            @if (Model.AcceptedBookings.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-success">
+                                            <tr>
+                                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                                                <th><i class="fas fa-user me-1"></i>Khách hàng</th>
+                                                <th><i class="fas fa-heartbeat me-1"></i>Dịch vụ</th>
+                                                <th><i class="fas fa-user-md me-1"></i>Bác sĩ</th>
+                                                <th><i class="fas fa-calendar me-1"></i>Ngày đặt</th>
+                                                <th><i class="fas fa-info-circle me-1"></i>Trạng thái</th>
+                                                <th><i class="fas fa-cogs me-1"></i>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var booking in Model.AcceptedBookings)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@booking.BookingId</span></td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.UserName</strong>
+                                                            <br><small class="text-muted">@booking.UserEmail</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.ServiceName</strong>
+                                                            <br><small class="text-muted">@booking.ServiceMethodType</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.DoctorName</strong>
+                                                            <br><small class="text-muted">@booking.DoctorSpecialization</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if (booking.BookingDate.HasValue)
+                                                        {
+                                                            <span>@booking.BookingDate.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">N/A</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge @booking.StatusBadgeClass">
+                                                            <i class="@booking.StatusIcon me-1"></i>@booking.Status
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <a asp-action="Details" asp-route-id="@booking.BookingId" 
+                                                           class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-5">
+                                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                                    <h5 class="text-muted">Chưa có đặt lịch nào được xác nhận</h5>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Rejected Bookings Tab -->
+                        <div class="tab-pane fade @(Model.CurrentFilter == "rejected" ? "show active" : "")" 
+                             id="rejected" role="tabpanel" aria-labelledby="rejected-tab">
+                            @if (Model.RejectedBookings.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-danger">
+                                            <tr>
+                                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                                                <th><i class="fas fa-user me-1"></i>Khách hàng</th>
+                                                <th><i class="fas fa-heartbeat me-1"></i>Dịch vụ</th>
+                                                <th><i class="fas fa-user-md me-1"></i>Bác sĩ</th>
+                                                <th><i class="fas fa-calendar me-1"></i>Ngày đặt</th>
+                                                <th><i class="fas fa-cogs me-1"></i>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var booking in Model.RejectedBookings)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@booking.BookingId</span></td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.UserName</strong>
+                                                            <br><small class="text-muted">@booking.UserEmail</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.ServiceName</strong>
+                                                            <br><small class="text-muted">@booking.ServiceMethodType</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong>@booking.DoctorName</strong>
+                                                            <br><small class="text-muted">@booking.DoctorSpecialization</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if (booking.BookingDate.HasValue)
+                                                        {
+                                                            <span>@booking.BookingDate.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">N/A</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a asp-action="Details" asp-route-id="@booking.BookingId" 
+                                                           class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-5">
+                                    <i class="fas fa-times-circle fa-3x text-danger mb-3"></i>
+                                    <h5 class="text-muted">Chưa có đặt lịch nào bị từ chối</h5>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Auto refresh every 30 seconds for pending bookings
+            if ($('#pending-tab').hasClass('active')) {
+                setInterval(function() {
+                    location.reload();
+                }, 30000);
+            }
+        });
+    </script>
+}

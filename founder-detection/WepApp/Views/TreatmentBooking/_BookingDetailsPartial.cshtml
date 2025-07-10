@@ -1,0 +1,253 @@
+@model Model.Models.TreatmentBooking
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-12">
+            <!-- Booking Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">Đặt lịch #@Model.BookingId</h6>
+                @{
+                    var statusClass = Model.Status switch
+                    {
+                        "Chờ xác nhận" => "bg-warning text-dark",
+                        "Đã xác nhận" => "bg-info text-white",
+                        "Đã đặt lịch" => "bg-success text-white",
+                        "Đang điều trị" => "bg-primary text-white",
+                        "Hoàn thành" => "bg-success text-white",
+                        "Đã từ chối" => "bg-danger text-white",
+                        "Đã hủy" => "bg-secondary text-white",
+                        _ => "bg-secondary text-white"
+                    };
+                }
+                <span class="badge @statusClass">@(Model.Status ?? "N/A")</span>
+            </div>
+
+            <!-- Service Information -->
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0"><i class="fas fa-heartbeat me-2"></i>Dịch vụ điều trị</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="text-primary">@(Model.Service?.Name ?? "N/A")</h6>
+                            <p class="mb-1">
+                                <strong>Phương pháp:</strong> 
+                                <span class="badge bg-info">@(Model.Service?.MethodType ?? "N/A")</span>
+                            </p>
+                            <p class="mb-0">
+                                <strong>Mô tả:</strong> @(Model.Service?.Description ?? "Chưa có mô tả")
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            @if (Model.Service?.Price.HasValue == true)
+                            {
+                                <h5 class="text-success mb-0">@Model.Service.Price.Value.ToString("N0") VNĐ</h5>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">Liên hệ để biết giá</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Information -->
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="fas fa-user-md me-2"></i>Bác sĩ phụ trách</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-success">@(Model.Doctor?.User?.FullName ?? "N/A")</h6>
+                            <p class="mb-1">
+                                <strong>Chuyên khoa:</strong> 
+                                <span class="badge bg-primary">@(Model.Doctor?.Specialization ?? "N/A")</span>
+                            </p>
+                            <p class="mb-0">
+                                <strong>Bằng cấp:</strong> @(Model.Doctor?.Degree ?? "N/A")
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1">
+                                <strong>Kinh nghiệm:</strong> 
+                                @if (Model.Doctor?.YearsOfExperience.HasValue == true)
+                                {
+                                    <span class="badge bg-warning text-dark">@Model.Doctor.YearsOfExperience năm</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </p>
+                            <p class="mb-0">
+                                <strong>Lịch làm việc:</strong> @(Model.Doctor?.WorkSchedule ?? "Liên hệ để biết lịch")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Details -->
+            <div class="card mb-3">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-calendar me-2"></i>Thông tin đặt lịch</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1">
+                                <strong>Ngày đặt:</strong>
+                                @if (Model.BookingDate.HasValue)
+                                {
+                                    <span>@Model.BookingDate.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1">
+                                <strong>Trạng thái:</strong> <span class="badge @statusClass">@(Model.Status ?? "N/A")</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Treatment Process -->
+            @if (Model.Service?.MethodType == "IVF" || Model.Service?.MethodType == "IUI")
+            {
+                <div class="card mb-3">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Quy trình điều trị</h6>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Service?.MethodType == "IVF")
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <span class="badge bg-primary me-2">1</span>
+                                        <small>Kích thích buồng trứng</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-info me-2">2</span>
+                                        <small>Theo dõi phát triển trứng</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <span class="badge bg-warning me-2">3</span>
+                                        <small>Lấy trứng</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-success me-2">4</span>
+                                        <small>Thụ tinh và chuyển phôi</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (Model.Service?.MethodType == "IUI")
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <span class="badge bg-primary me-2">1</span>
+                                        <small>Kích thích rụng trứng</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-info me-2">2</span>
+                                        <small>Theo dõi chu kỳ</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <span class="badge bg-success me-2">3</span>
+                                        <small>Thụ tinh nhân tạo</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Status Information -->
+            <div class="alert alert-light border">
+                @switch (Model.Status)
+                {
+                    case "Chờ xác nhận":
+                        <div class="text-warning">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>Chờ xác nhận:</strong> Yêu cầu đặt lịch đang được xem xét. Chúng tôi sẽ liên hệ trong vòng 24h.
+                        </div>
+                        break;
+                    case "Đã xác nhận":
+                        <div class="text-info">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>Đã xác nhận:</strong> Lịch điều trị đã được xác nhận. Vui lòng chuẩn bị theo hướng dẫn.
+                        </div>
+                        break;
+                    case "Đã đặt lịch":
+                        <div class="text-success">
+                            <i class="fas fa-calendar-check me-2"></i>
+                            <strong>Đã đặt lịch:</strong> Lịch điều trị đã được sắp xếp. Vui lòng đến đúng giờ.
+                        </div>
+                        break;
+                    case "Đang điều trị":
+                        <div class="text-primary">
+                            <i class="fas fa-heartbeat me-2"></i>
+                            <strong>Đang điều trị:</strong> Quá trình điều trị đang được thực hiện.
+                        </div>
+                        break;
+                    case "Hoàn thành":
+                        <div class="text-success">
+                            <i class="fas fa-flag-checkered me-2"></i>
+                            <strong>Hoàn thành:</strong> Quá trình điều trị đã hoàn tất.
+                        </div>
+                        break;
+                    case "Đã từ chối":
+                        <div class="text-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            <strong>Đã từ chối:</strong> Yêu cầu không thể thực hiện. Vui lòng liên hệ để biết thêm chi tiết.
+                        </div>
+                        break;
+                    default:
+                        <div class="text-muted">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Trạng thái hiện tại: @(Model.Status ?? "Không xác định")
+                        </div>
+                        break;
+                }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between">
+                <a asp-action="Details" asp-route-id="@Model.BookingId" class="btn btn-primary btn-sm">
+                    <i class="fas fa-eye me-1"></i>Xem chi tiết đầy đủ
+                </a>
+                
+                @if (Model.Status == "Chờ xác nhận")
+                {
+                    <button type="button" class="btn btn-danger btn-sm" onclick="cancelBooking(@Model.BookingId)">
+                        <i class="fas fa-times me-1"></i>Hủy lịch
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center py-4">
+        <i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i>
+        <h6>Không thể tải thông tin đặt lịch</h6>
+        <p class="text-muted">Vui lòng thử lại sau hoặc liên hệ hỗ trợ.</p>
+    </div>
+}

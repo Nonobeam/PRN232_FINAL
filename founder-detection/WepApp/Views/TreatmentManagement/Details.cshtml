@@ -1,0 +1,299 @@
+@model WebApp.Models.TreatmentBookingViewModel
+@{
+    ViewData["Title"] = "Chi tiết đặt lịch điều trị";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="h3 mb-0">
+                        <i class="fas fa-file-medical me-2 text-primary"></i>
+                        Chi tiết đặt lịch điều trị #@Model.BookingId
+                    </h2>
+                    <p class="text-muted mb-0">Thông tin chi tiết về yêu cầu đặt lịch</p>
+                </div>
+                <div>
+                    <span class="badge @Model.StatusBadgeClass fs-6">
+                        <i class="@Model.StatusIcon me-1"></i>@Model.Status
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Main Information -->
+                <div class="col-lg-8">
+                    <!-- Customer Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-user me-2"></i>Thông tin khách hàng
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Họ và tên:</label>
+                                        <p class="fw-bold">@Model.UserName</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Email:</label>
+                                        <p>
+                                            <a href="mailto:@Model.UserEmail" class="text-decoration-none">
+                                                <i class="fas fa-envelope me-1"></i>@Model.UserEmail
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Số điện thoại:</label>
+                                        <p>
+                                            @if (!string.IsNullOrEmpty(Model.UserPhone))
+                                            {
+                                                <a href="tel:@Model.UserPhone" class="text-decoration-none">
+                                                    <i class="fas fa-phone me-1"></i>@Model.UserPhone
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Chưa cập nhật</span>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Mã khách hàng:</label>
+                                        <p><span class="badge bg-secondary">#@Model.UserId</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-heartbeat me-2"></i>Thông tin dịch vụ
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Tên dịch vụ:</label>
+                                        <h6 class="text-primary">@Model.ServiceName</h6>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Phương pháp:</label>
+                                        <p>
+                                            <span class="badge bg-info">@Model.ServiceMethodType</span>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Mô tả:</label>
+                                        <p>@Model.ServiceDescription</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Chi phí:</label>
+                                        @if (Model.ServicePrice.HasValue)
+                                        {
+                                            <h5 class="text-success">@Model.ServicePrice.Value.ToString("N0") VNĐ</h5>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">Liên hệ để biết giá</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-user-md me-2"></i>Thông tin bác sĩ
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Bác sĩ phụ trách:</label>
+                                        <h6 class="text-primary">@Model.DoctorName</h6>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Chuyên khoa:</label>
+                                        <p>
+                                            <span class="badge bg-primary">@Model.DoctorSpecialization</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Mã bác sĩ:</label>
+                                        <p><span class="badge bg-secondary">#@Model.DoctorId</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Booking Status -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6 class="card-title mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Trạng thái đặt lịch
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Trạng thái hiện tại:</label>
+                                <p>
+                                    <span class="badge @Model.StatusBadgeClass">
+                                        <i class="@Model.StatusIcon me-1"></i>@Model.Status
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Ngày đặt lịch:</label>
+                                <p>
+                                    @if (Model.BookingDate.HasValue)
+                                    {
+                                        <i class="fas fa-calendar me-1"></i>@Model.BookingDate.Value.ToString("dd/MM/yyyy")
+                                        <br><small class="text-muted">@Model.BookingDate.Value.ToString("HH:mm")</small>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    @if (Model.Status == "Chờ xác nhận")
+                    {
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="card-title mb-0">
+                                    <i class="fas fa-cogs me-2"></i>Thao tác
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <a asp-action="Accept" asp-route-id="@Model.BookingId" 
+                                       class="btn btn-success">
+                                        <i class="fas fa-check me-1"></i>Xác nhận đặt lịch
+                                    </a>
+                                    <a asp-action="Reject" asp-route-id="@Model.BookingId" 
+                                       class="btn btn-danger">
+                                        <i class="fas fa-times me-1"></i>Từ chối đặt lịch
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Quick Info -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="card-title mb-0">
+                                <i class="fas fa-lightbulb me-2"></i>Thông tin hữu ích
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="small">
+                                <div class="mb-2">
+                                    <i class="fas fa-clock me-2 text-info"></i>
+                                    <strong>Thời gian xử lý:</strong> Tối đa 24h
+                                </div>
+                                <div class="mb-2">
+                                    <i class="fas fa-envelope me-2 text-info"></i>
+                                    <strong>Thông báo:</strong> Qua email và SMS
+                                </div>
+                                <div class="mb-2">
+                                    <i class="fas fa-phone me-2 text-info"></i>
+                                    <strong>Hỗ trợ:</strong> 1900-xxxx
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại danh sách
+                        </a>
+                        
+                        @if (Model.Status == "Chờ xác nhận")
+                        {
+                            <div>
+                                <a asp-action="Accept" asp-route-id="@Model.BookingId" 
+                                   class="btn btn-success me-2">
+                                    <i class="fas fa-check me-1"></i>Xác nhận
+                                </a>
+                                <a asp-action="Reject" asp-route-id="@Model.BookingId" 
+                                   class="btn btn-danger">
+                                    <i class="fas fa-times me-1"></i>Từ chối
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .badge {
+            font-size: 0.875em;
+        }
+        
+        .text-primary {
+            color: #0d6efd !important;
+        }
+        
+        .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+    </style>
+}

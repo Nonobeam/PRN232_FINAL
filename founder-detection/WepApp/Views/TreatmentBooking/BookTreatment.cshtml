@@ -70,10 +70,46 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label asp-for="BookingDate" class="form-label">
+                                        <i class="fas fa-calendar me-1"></i>@Html.DisplayNameFor(m => m.BookingDate) <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="BookingDate" type="date" class="form-control" id="bookingDate" required />
+                                    <span asp-validation-for="BookingDate" class="text-danger"></span>
+                                    <div class="form-text">Chỉ có thể đặt lịch từ thứ 2 đến thứ 6</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="BookingTime" class="form-label">
+                                        <i class="fas fa-clock me-1"></i>@Html.DisplayNameFor(m => m.BookingTime) <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="BookingTime" class="form-select" id="bookingTime" required>
+                                        <option value="">-- Chọn giờ đặt lịch --</option>
+                                        <option value="08:00:00">08:00 - 08:30</option>
+                                        <option value="08:30:00">08:30 - 09:00</option>
+                                        <option value="09:00:00">09:00 - 09:30</option>
+                                        <option value="09:30:00">09:30 - 10:00</option>
+                                        <option value="10:00:00">10:00 - 10:30</option>
+                                        <option value="10:30:00">10:30 - 11:00</option>
+                                        <option value="11:00:00">11:00 - 11:30</option>
+                                        <option value="11:30:00">11:30 - 12:00</option>
+                                        <option value="13:00:00">13:00 - 13:30</option>
+                                        <option value="13:30:00">13:30 - 14:00</option>
+                                        <option value="14:00:00">14:00 - 14:30</option>
+                                        <option value="14:30:00">14:30 - 15:00</option>
+                                        <option value="15:00:00">15:00 - 15:30</option>
+                                        <option value="15:30:00">15:30 - 16:00</option>
+                                        <option value="16:00:00">16:00 - 16:30</option>
+                                        <option value="16:30:00">16:30 - 17:00</option>
+                                    </select>
+                                    <span asp-validation-for="BookingTime" class="text-danger"></span>
+                                    <div class="form-text">Giờ làm việc: 8:00 - 17:00 (nghỉ trưa 12:00 - 13:00)</div>
+                                </div>
+
+                                <div class="mb-3">
                                     <label asp-for="Notes" class="form-label">
                                         <i class="fas fa-sticky-note me-1"></i>@Html.DisplayNameFor(m => m.Notes)
                                     </label>
-                                    <textarea asp-for="Notes" class="form-control" rows="4" 
+                                    <textarea asp-for="Notes" class="form-control" rows="4"
                                               placeholder="Nhập ghi chú về tình trạng sức khỏe, yêu cầu đặc biệt hoặc câu hỏi cho bác sĩ..."></textarea>
                                     <span asp-validation-for="Notes" class="text-danger"></span>
                                     <div class="form-text">Tối đa 500 ký tự</div>
@@ -142,6 +178,28 @@
     
     <script>
         $(document).ready(function() {
+            // Set minimum date to tomorrow
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            var minDate = tomorrow.toISOString().split('T')[0];
+            $('#bookingDate').attr('min', minDate);
+
+            // Booking date validation
+            $('#bookingDate').change(function() {
+                var selectedDate = new Date($(this).val());
+                var dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+                if (dayOfWeek === 0 || dayOfWeek === 6) { // Sunday or Saturday
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.text-danger').text('Chỉ có thể đặt lịch từ thứ 2 đến thứ 6');
+                    $('#bookingTime').prop('disabled', true);
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.text-danger').text('');
+                    $('#bookingTime').prop('disabled', false);
+                }
+            });
+
             // Service selection change handler
             $('#ServiceId').change(function() {
                 var selectedOption = $(this).find('option:selected');
@@ -149,13 +207,13 @@
                     var serviceName = selectedOption.text().split(' - ')[0];
                     var methodType = selectedOption.text().split(' - ')[1]?.split(' (')[0];
                     var price = selectedOption.data('price');
-                    
+
                     var serviceHtml = '<h6>' + serviceName + '</h6>';
                     serviceHtml += '<p><strong>Phương pháp:</strong> ' + methodType + '</p>';
                     if (price) {
                         serviceHtml += '<p><strong>Chi phí:</strong> ' + price.toLocaleString('vi-VN') + ' VNĐ</p>';
                     }
-                    
+
                     $('#serviceDetails').html(serviceHtml);
                     $('#serviceInfo').show();
                 } else {
@@ -193,11 +251,41 @@
                 var length = $(this).val().length;
                 var maxLength = 500;
                 var remaining = maxLength - length;
-                
+
                 if (remaining < 0) {
                     $(this).addClass('is-invalid');
                 } else {
                     $(this).removeClass('is-invalid');
+                }
+            });
+
+            // Form submission validation
+            $('form').on('submit', function(e) {
+                var isValid = true;
+
+                // Validate booking date
+                var selectedDate = new Date($('#bookingDate').val());
+                var dayOfWeek = selectedDate.getDay();
+
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    e.preventDefault();
+                    $('#bookingDate').addClass('is-invalid');
+                    $('#bookingDate').siblings('.text-danger').text('Chỉ có thể đặt lịch từ thứ 2 đến thứ 6');
+                    isValid = false;
+                }
+
+                // Validate booking time
+                if (!$('#bookingTime').val()) {
+                    e.preventDefault();
+                    $('#bookingTime').addClass('is-invalid');
+                    $('#bookingTime').siblings('.text-danger').text('Vui lòng chọn giờ đặt lịch');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    $('html, body').animate({
+                        scrollTop: $('.is-invalid').first().offset().top - 100
+                    }, 500);
                 }
             });
         });

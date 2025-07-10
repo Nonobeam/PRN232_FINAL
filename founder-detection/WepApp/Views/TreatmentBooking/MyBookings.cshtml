@@ -140,17 +140,21 @@
 
 <!-- Modal for booking details -->
 <div class="modal fade" id="bookingDetailsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Chi tiết đặt lịch</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-file-medical me-2"></i>Chi tiết đặt lịch điều trị
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="bookingDetailsContent">
                 <!-- Content will be loaded here -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Đóng
+                </button>
             </div>
         </div>
     </div>
@@ -160,14 +164,17 @@
     <script>
         function viewDetails(bookingId) {
             // Show loading
-            $('#bookingDetailsContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>');
+            $('#bookingDetailsContent').html('<div class="text-center py-4"><i class="fas fa-spinner fa-spin fa-2x text-primary"></i><br><br>Đang tải thông tin...</div>');
             $('#bookingDetailsModal').modal('show');
-            
-            // TODO: Load booking details via AJAX
-            // For now, show a placeholder
-            setTimeout(function() {
-                $('#bookingDetailsContent').html('<p>Chi tiết đặt lịch #' + bookingId + ' sẽ được hiển thị ở đây.</p>');
-            }, 500);
+
+            // Load booking details via AJAX
+            $.get('@Url.Action("DetailsPartial", "TreatmentBooking")/' + bookingId)
+                .done(function(data) {
+                    $('#bookingDetailsContent').html(data);
+                })
+                .fail(function() {
+                    $('#bookingDetailsContent').html('<div class="text-center py-4"><i class="fas fa-exclamation-triangle fa-2x text-danger"></i><br><br>Không thể tải thông tin. Vui lòng thử lại.</div>');
+                });
         }
 
         function cancelBooking(bookingId) {

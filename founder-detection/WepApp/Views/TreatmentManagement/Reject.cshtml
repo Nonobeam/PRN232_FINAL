@@ -1,0 +1,151 @@
+@model WebApp.Models.RejectTreatmentViewModel
+@{
+    ViewData["Title"] = "Từ chối đặt lịch điều trị";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-times-circle me-2"></i>Từ chối đặt lịch điều trị
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Booking Information -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Thông tin đặt lịch cần từ chối
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Mã đặt lịch:</strong> #@Model.BookingId</p>
+                                        <p class="mb-1"><strong>Khách hàng:</strong> @Model.UserName</p>
+                                        <p class="mb-0"><strong>Dịch vụ:</strong> @Model.ServiceName</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Bác sĩ:</strong> @Model.DoctorName</p>
+                                        <p class="mb-0"><strong>Ngày đặt:</strong> 
+                                            @if (Model.BookingDate.HasValue)
+                                            {
+                                                @Model.BookingDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">N/A</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reject Form -->
+                    <form asp-action="Reject" method="post" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="BookingId" />
+                        <input type="hidden" asp-for="UserName" />
+                        <input type="hidden" asp-for="ServiceName" />
+                        <input type="hidden" asp-for="DoctorName" />
+                        <input type="hidden" asp-for="BookingDate" />
+
+                        <div class="alert alert-warning">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Từ chối đặt lịch điều trị
+                            </h6>
+                            <p class="mb-0">
+                                Bạn có chắc chắn muốn từ chối đặt lịch điều trị này không?
+                                Khách hàng sẽ nhận được thông báo và có thể đặt lịch lại sau.
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Quay lại
+                            </a>
+                            <div>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-times me-1"></i>Từ chối đặt lịch
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Additional Information Card -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Hướng dẫn từ chối đặt lịch
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-danger">
+                                <i class="fas fa-times-circle me-1"></i>Sau khi từ chối:
+                            </h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-envelope me-2 text-info"></i>Khách hàng sẽ nhận thông báo</li>
+                                <li><i class="fas fa-undo me-2 text-info"></i>Trạng thái chuyển thành "Đã từ chối"</li>
+                                <li><i class="fas fa-phone me-2 text-info"></i>Khách hàng có thể đặt lịch lại</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">
+                                <i class="fas fa-lightbulb me-1"></i>Lưu ý quan trọng:
+                            </h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check me-2 text-success"></i>Quyết định cần cân nhắc kỹ</li>
+                                <li><i class="fas fa-check me-2 text-success"></i>Có thể liên hệ khách hàng trước</li>
+                                <li><i class="fas fa-check me-2 text-success"></i>Đảm bảo lý do chính đáng</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Form confirmation
+            $('form').on('submit', function(e) {
+                if (!confirm('Bạn có chắc chắn muốn từ chối đặt lịch điều trị này không?')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .alert-warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .card-header.bg-danger {
+            background-color: #dc3545 !important;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
+}
